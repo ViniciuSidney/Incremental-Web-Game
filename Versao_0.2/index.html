@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste 02</title>
+
+    <style>
+
+    </style>
+</head>
+<body>
+    <p id="points_c">Pontos: 0</p>
+    <p id="pointspc_c">Pontos por Clique: +1</p>
+    <button id="points_b">+# Pontos</button>
+    <button id="pointspc_b">+# Pontos por Clique</button>
+</body>
+<script>
+    const ui = {
+        points_counter: document.getElementById("points_c"),
+        points_button: document.getElementById("points_b"),
+
+        pointspc_counter: document.getElementById("pointspc_c"),
+        pointspc_button: document.getElementById("pointspc_b"),
+    }
+
+    const game_l = {
+        points: 0,
+        points_per_click: 1,
+    }
+
+    const upgrade_l = {
+        points_per_click_price: 5,
+        points_per_click_level: 1,
+        points_per_click_increase: 2.5,
+    }
+
+    updateUI();
+
+    function pointsButton(){
+        game_l.points += game_l.points_per_click;
+        updateUI()
+    }
+
+    function pointspcButton(){
+        if (game_l.points >= (Math.floor(upgrade_l.points_per_click_price * 100 ) / 100)) {
+            game_l.points -= upgrade_l.points_per_click_price;
+            upgrade_l.points_per_click_price *= upgrade_l.points_per_click_increase;
+            upgrade_l.points_per_click_level += 1;
+            game_l.points_per_click += 1;
+        }
+        updateUI()
+    }
+
+    //Interface (Contadores)
+    function updateCounters(){
+        ui.points_counter.innerHTML = "Pontos: <b>" + (Math.round(game_l.points * 100 ) / 100) + "</b>"
+        ui.pointspc_counter.innerHTML = "Pontos por Clique: <b>+" + game_l.points_per_click + "</b>"
+    }
+    function updateButtons(){
+        ui.points_button.innerHTML = "Clique para +<b>" + game_l.points_per_click + "</b> Pontos"
+        ui.pointspc_button.innerHTML = "+<b>" + 1 + "</b> \"Pontos por Clique\"" + " ( "+ (Math.round(upgrade_l.points_per_click_price * 100 ) / 100) +" Pontos )" + " [ " + upgrade_l.points_per_click_level + " ]"
+    }
+
+    function updateUI(){
+        updateCounters()
+        updateButtons()
+    }
+
+    //Chamadas de Função
+    ui.points_button.addEventListener('click', pointsButton)
+    ui.pointspc_button.addEventListener('click', pointspcButton)
+
+</script>
+</html>
