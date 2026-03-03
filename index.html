@@ -70,19 +70,21 @@
         level: 0,
         level_multiplier: 0,
 
-        points_for_xp: 1000,
+        points_for_xp: 100,
         xp_for_level: 5,
         max_level: 10,
         xp_gain: 1,
         level_multiplier_gain: 1,
-        requirement_multiplier: 2,
-        base_requirement: 1,
+        points_requirement_multiplier: 2,
+        xp_requirement_multiplier: 2,
+        points_base_requirement_multiplier: 1,
+        xp_base_requirement_multiplier: 1,
     }
     // ---
 
     // Chamada Inicial
     loadGame();
-    updateUI();
+    updateGame();
     // ---
 
     // Funções Utilitárias
@@ -93,14 +95,14 @@
 
     function points_auto_production(){
         game_l.points += game_l.points_per_second;
-        updateUI();
+        updateGame();
     }
     setInterval(points_auto_production, game_l.points_per_x_millisecond);
 
     // Botões
     function pointsButton(){
         game_l.points += game_l.points_per_click;
-        updateUI()
+        updateGame()
     }
 
     function pointspcButton(){
@@ -110,7 +112,7 @@
             upgrade_l.points_per_click_level += 1;
             game_l.points_per_click += upgrade_l.points_per_click_gain;
         }
-        updateUI()
+        updateGame()
     }
 
     function pointspsButton(){
@@ -120,7 +122,7 @@
             upgrade_l.points_per_second_level += 1;
             game_l.points_per_second += upgrade_l.points_per_second_gain;
         }
-        updateUI()
+        updateGame()
     }
 
     function saveButton(){
@@ -133,7 +135,22 @@
     }
     // ---
 
+    function updateXp(){
+        if (game_l.points >= level_l.points_for_xp){
+            level_l.points_for_xp *= level_l.points_requirement_multiplier
+            level_l.xp += level_l.xp_gain
+            console.log("Ganhou +"+level_l.xp_gain+" Xp")
+            console.log("Xp Atual: "+level_l.xp+" / "+level_l.xp_for_level)
+            console.log("Requerimento Atual: "+level_l.points_for_xp+" Pontos")
+        }
+    }
+
+    function updateLevelUp(){
+        updateXp()
+    }
+
     // Interface (Contadores e Botões)
+
     function updateCounters(){
         ui.points_counter.innerHTML = `Pontos: <b>${formatNumber(game_l.points)}</b>`
         ui.pointspc_counter.innerHTML = `Pontos por Clique: <b>+${game_l.points_per_click} </b>`
@@ -152,10 +169,7 @@
         ui.pointsps_button.innerHTML = pointsps_b_text;
     }
 
-    function updateUI(){
-        updateCounters();
-        updateButtons();
-    }
+
     // ---
 
     // Funções de Salvamento
@@ -179,13 +193,23 @@
     // ---
 
     //Chamadas de Função
+    function updateUI(){
+        updateCounters();
+        updateButtons();
+    }
+    function updateGame(){
+        updateUI()
+        updateLevelUp()
+    }
+
+
     ui.points_button.addEventListener('click', pointsButton)
     ui.pointspc_button.addEventListener('click', pointspcButton)
     ui.pointsps_button.addEventListener('click', pointspsButton)
     ui.save_button.addEventListener('click', saveButton)
     ui.reset_button.addEventListener('click', resetButton)
 
-    setInterval(saveGame, 10000); // 10 segundos
+    setInterval(saveGame, 10000); // Salvar jogo a cada 10 segundos
     // ---
 </script>
 </html>
