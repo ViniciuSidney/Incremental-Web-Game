@@ -10,15 +10,17 @@
             font-family: "JetBrains Mono";
             font-size: 20px;
         }
-        #v-comment{
+        #v_comment{
             font-size: 15px;
         }
     </style>
 </head>
 <body>
+    <p id="points_mult">Multiplicador de Pontos: <b>x1</b></p>
     <p id="points_c">Pontos: 0</p>
     <p id="pointspc_c">Pontos por Clique: +1</p>
     <p id="pointsps_c">Pontos a cada 1 Segundo: +1</p>
+
     <button id="points_b">Clique para +# Pontos</button>
     <br><br><br>
     <button id="pointspc_b">+# Pontos por Clique</button> <br> <br>
@@ -26,16 +28,20 @@
     <br><br><br>
     <button id="save_b"><b>Salvar</b> Progresso</button>
     <button id="reset_b"><b>Resetar</b> Progresso</button>
+
     <p id="save_warning">(Salvamento Automático a cada <b>10</b> Segundos)</p>
 
-    <p id="v-comment">Comentário do Fragmento da V0.4 (Pré_01-0.4): <br><i>Abra o Console para mais informações sobre o novo <b>Sistema de Níveis</b>.</i></p>
+    <p id="v_comment">Comentário do Fragmento da V0.4 (Pré_01-0.4): <br><i>Abra o Console para mais informações sobre o novo <b>Sistema de Níveis</b>.</i></p>
     <p>Versão <b>0.4</b> - <i>Sistema de Níveis</i></p>
 </body>
 <script>
+
     // Variáveis 
     const SAVE_KEY = "mySave";
 
     const ui = {
+        points_multiplier_counter: document.getElementById("points_mult"),
+
         points_counter: document.getElementById("points_c"),
         points_button: document.getElementById("points_b"),
 
@@ -60,12 +66,12 @@
     const upgrade_l = {
         points_per_click_price: 5,
         points_per_click_level: 1,
-        points_per_click_increase: 2.5,
+        points_per_click_increase: 2.25,
         points_per_click_gain: 1,
 
         points_for_every_time_interval_price: 50,
         points_for_every_time_interval_level: 1,
-        points_for_every_time_interval_increase: 2.75,
+        points_for_every_time_interval_increase: 2.5,
         points_for_every_time_interval_gain: 1,
     }
 
@@ -78,7 +84,7 @@
         xp_for_level: 2,
         max_level: 10,
         xp_gain: 1,
-        level_multiplier_gain: 1,
+        level_multiplier_gain: 0.5,
         points_requirement_multiplier: 2,
         xp_requirement_multiplier: 2,
         points_base_requirement_multiplier: 1,
@@ -99,7 +105,7 @@
 
     function points_auto_production(){
         if (game_l.points_for_every_time_interval > 0){
-            game_l.points += game_l.points_for_every_time_interval;
+            game_l.points += game_l.points_for_every_time_interval * formatNumber(game_l.points_multiplier);
             updateGame();
         }
     }
@@ -107,7 +113,7 @@
 
     // Botões
     function pointsButton(){
-        game_l.points += game_l.points_per_click;
+        game_l.points += game_l.points_per_click * (game_l.points_multiplier || 1)
         updateGame()
     }
 
@@ -149,6 +155,7 @@
             game_l.points -= level_l.points_for_xp
             level_l.points_for_xp = (level_l.points_for_xp / (Math.pow(2, (level_l.xp-2))))
             level_l.xp = 0
+            game_l.points_multiplier += level_l.level_multiplier_gain
             updateUI()
         }
     }
@@ -193,16 +200,17 @@
     }
 
     function updateCounters(){
+        ui.points_multiplier_counter.innerHTML = `Multiplicador de Pontos: <b>x${formatNumber(game_l.points_multiplier)}</b>`
         ui.points_counter.innerHTML = `Pontos: <b>${formatNumber(game_l.points)}</b>`
-        ui.pointspc_counter.innerHTML = `Pontos por Clique: <b>+${game_l.points_per_click} </b>`
-        ui.pointsps_counter.innerHTML = `Pontos a cada <b>${game_l.x_milliseconds_for_every_point_gain/1000}</b> Segundo: <b>+${game_l.points_for_every_time_interval} </b>`
+        ui.pointspc_counter.innerHTML = `Pontos por Clique: <b>+${game_l.points_per_click * formatNumber(game_l.points_multiplier)} </b>`
+        ui.pointsps_counter.innerHTML = `Pontos a cada <b>${game_l.x_milliseconds_for_every_point_gain/1000}</b> Segundo: <b>+${game_l.points_for_every_time_interval * formatNumber(game_l.points_multiplier)} </b>`
     }
 
     function updateButtons(){
-        let points_b_text = `Clique para +<b>${game_l.points_per_click} </b> Pontos`;
-        let pointspc_b_text = `+<b>${upgrade_l.points_per_click_gain} </b> \"Pontos por Clique\" 
+        let points_b_text = `Clique para +<b>${game_l.points_per_click * formatNumber(game_l.points_multiplier)} </b> Pontos`;
+        let pointspc_b_text = `+<b>${upgrade_l.points_per_click_gain * formatNumber(game_l.points_multiplier)} </b> \"Pontos por Clique\" 
         ( ${formatNumber(upgrade_l.points_per_click_price)} Pontos ) [ ${upgrade_l.points_per_click_level} ]`;
-        let pointsps_b_text = `+<b>${upgrade_l.points_for_every_time_interval_gain} </b> Pontos por \"Intervalo\" 
+        let pointsps_b_text = `+<b>${upgrade_l.points_for_every_time_interval_gain * formatNumber(game_l.points_multiplier)} </b> Pontos por \"Intervalo\" 
         ( ${formatNumber(upgrade_l.points_for_every_time_interval_price)} Pontos ) [ ${upgrade_l.points_for_every_time_interval_level} ]`;
 
         ui.points_button.innerHTML = points_b_text;
