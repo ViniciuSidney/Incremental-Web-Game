@@ -17,6 +17,13 @@
 </head>
 <body>
     <p id="points_mult">Multiplicador de Pontos: <b>x1</b></p>
+
+    <p id="level_points_progress_c">Pontos: ( "Pontos Atuais" / "Pontos Necessários" ) ➡ +1 Xp</p>
+    <p id="level_xp_progress_c">Xp: ( "Xp" / "Xp Necessário" ) ➡ +1 Level</p>
+    <p id="level_level_progress_c">Level: ( "Level" / 10 ) ➡ +@x</p>
+
+    <p>---</p>
+
     <p id="points_c">Pontos: 0</p>
     <p id="pointspc_c">Pontos por Clique: +1</p>
     <p id="pointsps_c">Pontos a cada 1 Segundo: +1</p>
@@ -31,8 +38,7 @@
 
     <p id="save_warning">(Salvamento Automático a cada <b>10</b> Segundos)</p>
 
-    <p id="v_comment">Comentário do Fragmento da V0.4 (Pré_01-0.4): <br><i>Abra o Console para mais informações sobre o novo <b>Sistema de Níveis</b>.</i></p>
-    <p>Versão <b>0.4</b> - <i>Sistema de Níveis</i></p>
+    <p id="v_comment">Comentário do Fragmento da V0.4 (Pré_02-0.4): <br><i>Sem Comentários, divirta-se!</i></p>
 </body>
 <script>
 
@@ -41,6 +47,10 @@
 
     const ui = {
         points_multiplier_counter: document.getElementById("points_mult"),
+
+        level_points_progress_counter: document.getElementById("level_points_progress_c"),
+        level_xp_progress_counter: document.getElementById("level_xp_progress_c"),
+        level_level_progress_counter: document.getElementById("level_level_progress_c"),
 
         points_counter: document.getElementById("points_c"),
         points_button: document.getElementById("points_b"),
@@ -184,18 +194,18 @@
     function updateLevelUpCounters(type){
         switch (type) {
             case "xp":
-                console.log("Xp Atual: "+level_l.xp+" / "+level_l.xp_for_level)
+                ui.level_xp_progress_counter.innerHTML("Xp: ( "+formatNumber(level_l.xp)+" / "+formatNumber(level_l.xp_for_level, "f")+" ) ➡ +1 Level")
                 break;
             case "level":
-                console.log("Level Atual: "+level_l.level+" / "+level_l.max_level)  
+                ui.level_level_progress_counter.innerHTML = ("Level: ( "+formatNumber(level_l.level)+" / "+formatNumber(level_l.max_level, "f")+" ) ➡ +x "+level_l.level_multiplier_gain+"Pontos")
                 break;
             case "points_req":
-                console.log("Requerimento de Pontos Atual: "+formatNumber(level_l.points_for_xp, "f")+" Pontos")
+                ui.level_points_progress_counter.innerHTML = ("Pontos: ( "+formatNumber(game_l.points)+" / "+formatNumber(level_l.points_for_xp, "f")+" ) ➡ +"+level_l.xp_gain+" Xp")
                 break;
             default:
-                console.log("Xp Atual: "+level_l.xp+" / "+level_l.xp_for_level)
-                console.log("Level Atual: "+level_l.level+" / "+level_l.max_level)  
-                console.log("Requerimento de Pontos Atual: "+formatNumber(level_l.points_for_xp, "f")+" Pontos")
+                ui.level_xp_progress_counter.innerHTML = ("Xp: ( "+level_l.xp+" / "+level_l.xp_for_level+" ) ➡ +1 Level")
+                ui.level_level_progress_counter.innerHTML = ("Level: ( "+level_l.level+" / "+level_l.max_level+" ) ➡ + x"+level_l.level_multiplier_gain+" Pontos")
+                ui.level_points_progress_counter.innerHTML = ("Pontos: ( "+formatNumber(game_l.points)+" / "+formatNumber(level_l.points_for_xp, "f")+" ) ➡ +"+level_l.xp_gain+" Xp")
         }
 
     }
@@ -245,8 +255,8 @@
     // ---
 
     //Chamadas de Função
-    updateLevelUpCounters();
     function updateUI(){
+        updateLevelUpCounters();
         updateCounters();
         updateButtons();
     }
