@@ -66,12 +66,12 @@
     const upgrade_l = {
         points_per_click_price: 5,
         points_per_click_level: 1,
-        points_per_click_increase: 2.25,
+        points_per_click_increase: 1.75,
         points_per_click_gain: 1,
 
         points_for_every_time_interval_price: 50,
         points_for_every_time_interval_level: 1,
-        points_for_every_time_interval_increase: 2.5,
+        points_for_every_time_interval_increase: 2,
         points_for_every_time_interval_gain: 1,
     }
 
@@ -80,8 +80,8 @@
         level: 0,
         level_multiplier: 0,
 
-        base_points_for_xp: 10,
-        points_for_xp: 10,
+        base_points_for_xp: 50,
+        points_for_xp: 50,
         xp_for_level: 2,
         max_level: 10,
         xp_gain: 1,
@@ -153,7 +153,7 @@
             level_l.level += 1
             console.log("Subiu para o Nível "+level_l.level)
             game_l.points -= level_l.points_for_xp
-            level_l.points_for_xp = level_l.base_points_for_xp *  Math.pow(level_l.points_requirement_multiplier, level_l.xp_for_level+1)
+            level_l.points_for_xp = (level_l.base_points_for_xp) * ((level_l.xp_for_level*2)-1) * level_l.level
             level_l.xp_for_level += level_l.xp_requirement_increase
             level_l.xp = 0
             game_l.points_multiplier += level_l.level_multiplier_gain
@@ -166,7 +166,7 @@
         console.log("Ganhou +"+level_l.xp_gain+" Xp")
 
         if (level_l.xp < (level_l.xp_for_level)){
-            level_l.points_for_xp *= level_l.points_requirement_multiplier
+            level_l.points_for_xp *= 1.75//((level_l.xp_for_level/2) + 0.5)
         } else {
             updateLevel()
         }
@@ -190,12 +190,12 @@
                 console.log("Level Atual: "+level_l.level+" / "+level_l.max_level)  
                 break;
             case "points_req":
-                console.log("Requerimento de Pontos Atual: "+level_l.points_for_xp+" Pontos")
+                console.log("Requerimento de Pontos Atual: "+formatNumber(level_l.points_for_xp, "f")+" Pontos")
                 break;
             default:
                 console.log("Xp Atual: "+level_l.xp+" / "+level_l.xp_for_level)
                 console.log("Level Atual: "+level_l.level+" / "+level_l.max_level)  
-                console.log("Requerimento de Pontos Atual: "+level_l.points_for_xp+" Pontos \n---")
+                console.log("Requerimento de Pontos Atual: "+formatNumber(level_l.points_for_xp, "f")+" Pontos")
         }
 
     }
