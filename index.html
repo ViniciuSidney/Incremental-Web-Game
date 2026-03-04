@@ -80,13 +80,14 @@
         level: 0,
         level_multiplier: 0,
 
-        points_for_xp: 100,
+        base_points_for_xp: 10,
+        points_for_xp: 10,
         xp_for_level: 2,
         max_level: 10,
         xp_gain: 1,
         level_multiplier_gain: 0.5,
-        points_requirement_multiplier: 2,
-        xp_requirement_multiplier: 2,
+        points_requirement_multiplier: 1.5,
+        xp_requirement_increase: 1,
         points_base_requirement_multiplier: 1,
         xp_base_requirement_multiplier: 1,
     }
@@ -151,9 +152,9 @@
         if (level_l.xp == level_l.xp_for_level){
             level_l.level += 1
             console.log("Subiu para o Nível "+level_l.level)
-            level_l.xp_for_level *= level_l.xp_requirement_multiplier
             game_l.points -= level_l.points_for_xp
-            level_l.points_for_xp = (level_l.points_for_xp / (Math.pow(2, (level_l.xp-2))))
+            level_l.points_for_xp = level_l.base_points_for_xp *  Math.pow(level_l.points_requirement_multiplier, level_l.xp_for_level+1)
+            level_l.xp_for_level += level_l.xp_requirement_increase
             level_l.xp = 0
             game_l.points_multiplier += level_l.level_multiplier_gain
             updateUI()
