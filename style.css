@@ -1,8 +1,148 @@
-
-body {
-   font-family: "JetBrains Mono";
-   font-size: 20px;
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-#v_comment{
-   font-size: 15px;
+
+/* Layout geral */
+body {
+  font-family: "jetbrains mono", monospace;
+  background-color: #ffffff;
+  display: flex;
+  min-height: 100vh;
+}
+
+body button {
+  font-family: "jetbrains mono", monospace;
+}
+
+/* Container geral */
+.container {
+  display: flex;
+  width: 100%;
+}
+
+/* Painel esquerdo (1/3 da tela) */
+.panel {
+  width: 33%;
+  min-width: 320px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Multiplicador */
+#points_mult {
+  text-align: center;
+  font-size: 18px;
+}
+
+/* Grupo de progresso */
+.progress-group p {
+  background-color: #e6e6e6;
+  border-radius: 20px;
+  padding: 8px 12px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Status */
+.stats p {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+#points_c_n {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.stats p span {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* Botão principal */
+#points_b {
+  margin: 12px auto;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 14px;
+  border: 4px solid #2ecc71;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #079e46;
+}
+
+#points_b:hover {
+  background-color: #e0ffe8;
+}
+
+/* Upgrades */
+.upgrades button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  border: 3px solid #4da3ff;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #175392;
+}
+
+.upgrades button:hover {
+  background-color: #e6f1ff;
+}
+
+/* Sistema */
+.system {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#save_b {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 3px solid #b3ff6b;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #557a32;
+}
+#reset_b {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 3px solid #ff6b6b;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+  color: #a72a2a;
+}
+
+#save_b:hover {
+  background-color: #f6ffe6;
+}
+#reset_b:hover {
+  background-color: #ffe6e6;
+}
+
+/* Aviso de salvamento */
+#save_warning {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Comentário de versão */
+#v_comment {
+  margin-top: auto;
+  font-size: 12px;
+  color: #888;
+  text-align: center;
 }
