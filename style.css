@@ -1,148 +1,338 @@
-/* Reset básico */
+/* ======================================================
+   RESET E CONFIGURAÇÕES GERAIS
+====================================================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Layout geral */
+:root {
+  --color-bg: #f4f6fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #eef2f7;
+
+  --color-text: #1f2937;
+  --color-text-muted: #6b7280;
+
+  --color-primary: #2563eb;
+  --color-primary-soft: #dbeafe;
+
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
+
+  --color-danger: #dc2626;
+  --color-danger-soft: #fee2e2;
+
+  --color-warning: #ca8a04;
+  --color-warning-soft: #fef3c7;
+
+  --color-border: #d7dce5;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  --shadow-panel: 0 16px 40px rgba(15, 23, 42, 0.08);
+  --shadow-button: 0 6px 14px rgba(15, 23, 42, 0.08);
+
+  --font-main: "JetBrains Mono", monospace;
+}
+
 body {
-  font-family: "jetbrains mono", monospace;
-  background-color: #ffffff;
-  display: flex;
   min-height: 100vh;
+  font-family: var(--font-main);
+  background:
+    radial-gradient(circle at top left, #dbeafe 0, transparent 32%),
+    linear-gradient(135deg, #f8fafc 0%, var(--color-bg) 100%);
+  color: var(--color-text);
 }
 
-body button {
-  font-family: "jetbrains mono", monospace;
+button {
+  font-family: inherit;
 }
 
-/* Container geral */
+
+/* ======================================================
+   LAYOUT GERAL
+====================================================== */
+
 .container {
-  display: flex;
   width: 100%;
+  min-height: 100vh;
+  padding: 32px;
+  display: flex;
+  align-items: stretch;
 }
 
-/* Painel esquerdo (1/3 da tela) */
 .panel {
-  width: 33%;
+  width: 380px;
   min-width: 320px;
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
 }
 
-/* Multiplicador */
+
+/* ======================================================
+   MULTIPLICADOR
+====================================================== */
+
 #points_mult {
+  padding: 14px 16px;
   text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+
+  background-color: var(--color-primary-soft);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md);
+  color: #1e3a8a;
+}
+
+#points_mult b {
   font-size: 18px;
 }
 
-/* Grupo de progresso */
-.progress-group p {
-  background-color: #e6e6e6;
-  border-radius: 20px;
-  padding: 8px 12px;
-  margin-bottom: 5px;
-  font-size: 14px;
-  text-align: center;
+
+/* ======================================================
+   PROGRESSO DE NÍVEIS
+====================================================== */
+
+.progress-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Status */
-.stats p {
+.progress-group p {
+  padding: 10px 12px;
   text-align: center;
   font-size: 12px;
-  margin-top: 7px;
+  line-height: 1.45;
+
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
 }
 
-#points_c_n {
-  font-size: 25px;
-  font-weight: bold;
+#level_points_progress_c {
+  background-color: var(--color-warning-soft);
+  border-color: #fde68a;
+  color: #854d0e;
+}
+
+#level_xp_progress_c {
+  background-color: var(--color-primary-soft);
+  border-color: #bfdbfe;
+  color: #1e3a8a;
+}
+
+#level_level_progress_c {
+  background-color: var(--color-success-soft);
+  border-color: #bbf7d0;
+  color: #166534;
+}
+
+
+/* ======================================================
+   DIVISÓRIA
+====================================================== */
+
+hr {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+
+/* ======================================================
+   STATUS DO JOGO
+====================================================== */
+
+.stats {
+  display: grid;
+  gap: 10px;
+}
+
+.stats p {
+  padding: 14px 12px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+
+  background-color: var(--color-surface-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
 }
 
 .stats p span {
-  font-size: 15px;
-  font-weight: bold;
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
-/* Botão principal */
-#points_b {
-  margin: 12px auto;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 14px;
-  border: 4px solid #2ecc71;
-  background-color: #f0f0f0;
+#points_c_n {
+  font-size: 30px;
+  color: var(--color-primary);
+}
+
+
+/* ======================================================
+   BOTÕES BASE
+====================================================== */
+
+button {
+  border: none;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: 0.2s;
-  color: #079e46;
+
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-button);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+
+/* ======================================================
+   BOTÃO PRINCIPAL
+====================================================== */
+
+#points_b {
+  width: 100%;
+  padding: 16px 18px;
+
+  font-size: 15px;
+  color: #ffffff;
+
+  background-color: var(--color-success);
+  border: 2px solid #15803d;
 }
 
 #points_b:hover {
-  background-color: #e0ffe8;
+  background-color: #15803d;
 }
 
-/* Upgrades */
+
+/* ======================================================
+   UPGRADES
+====================================================== */
+
+.upgrades {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .upgrades button {
   width: 100%;
-  padding: 10px;
-  border-radius: 12px;
-  border: 3px solid #4da3ff;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: 0.2s;
-  color: #175392;
+  padding: 13px 14px;
+
+  color: #1d4ed8;
+  background-color: var(--color-primary-soft);
+  border: 2px solid #93c5fd;
 }
 
 .upgrades button:hover {
-  background-color: #e6f1ff;
+  background-color: #bfdbfe;
 }
 
-/* Sistema */
+
+/* ======================================================
+   SISTEMA
+====================================================== */
+
 .system {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#save_b,
+#reset_b {
+  padding: 11px 12px;
 }
 
 #save_b {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 3px solid #b3ff6b;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: 0.2s;
-  color: #557a32;
-}
-#reset_b {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 3px solid #ff6b6b;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: 0.2s;
-  color: #a72a2a;
+  color: #166534;
+  background-color: var(--color-success-soft);
+  border: 2px solid #86efac;
 }
 
 #save_b:hover {
-  background-color: #f6ffe6;
-}
-#reset_b:hover {
-  background-color: #ffe6e6;
+  background-color: #bbf7d0;
 }
 
-/* Aviso de salvamento */
+#reset_b {
+  color: #991b1b;
+  background-color: var(--color-danger-soft);
+  border: 2px solid #fca5a5;
+}
+
+#reset_b:hover {
+  background-color: #fecaca;
+}
+
+
+/* ======================================================
+   INFORMAÇÕES FINAIS
+====================================================== */
+
 #save_warning {
   text-align: center;
-  font-size: 13px;
-  color: #666;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
 }
 
-/* Comentário de versão */
 #v_comment {
   margin-top: auto;
-  font-size: 12px;
-  color: #888;
+  padding-top: 10px;
+
   text-align: center;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+
+/* ======================================================
+   RESPONSIVIDADE
+====================================================== */
+
+@media (max-width: 720px) {
+  .container {
+    padding: 16px;
+  }
+
+  .panel {
+    width: 100%;
+    min-width: 0;
+  }
 }
