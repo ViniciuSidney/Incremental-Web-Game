@@ -1,304 +1,347 @@
-// Variáveis
-const SAVE_KEY = "mySave";
+// ======================================================
+// CONFIGURAÇÕES GERAIS
+// ======================================================
+
+const SAVE_KEY = 'mySave';
+
+
+// ======================================================
+// REFERÊNCIAS DA INTERFACE
+// ======================================================
 
 const ui = {
   // Multiplicador
-  points_multiplier_counter: document.getElementById("points_mult"),
+  pointsMultiplierCounter: document.getElementById('points_mult'),
 
   // Progresso de nível
-  level_points_progress_counter: document.getElementById(
-    "level_points_progress_c",
+  levelPointsProgressCounter: document.getElementById(
+    'level_points_progress_c',
   ),
-  level_xp_progress_counter: document.getElementById("level_xp_progress_c"),
-  level_level_progress_counter: document.getElementById(
-    "level_level_progress_c",
+  levelXpProgressCounter: document.getElementById('level_xp_progress_c'),
+  levelLevelProgressCounter: document.getElementById(
+    'level_level_progress_c',
   ),
 
   // Pontos
-  points_counter: document.getElementById("points_c"),
-  points_counter_n: document.getElementById("points_c_n"),
-  points_button: document.getElementById("points_b"),
+  pointsCounterNumber: document.getElementById('points_c_n'),
+  pointsButton: document.getElementById('points_b'),
 
-  // Pontos por Clique
-  pointspc_counter: document.getElementById("pointspc_c"),
-  pointspc_counter_n: document.getElementById("pointspc_c_n"),
-  pointspc_button: document.getElementById("pointspc_b"),
+  // Pontos por clique
+  pointsPerClickCounterNumber: document.getElementById('pointspc_c_n'),
+  pointsPerClickButton: document.getElementById('pointspc_b'),
 
-  // Pontos por Segundo
-  pointsps_counter: document.getElementById("pointsps_c"),
-  pointsps_counter_n: document.getElementById("pointsps_c_n"),
-  pointsps_button: document.getElementById("pointsps_b"),
+  // Pontos por segundo
+  pointsPerSecondCounterNumber: document.getElementById('pointsps_c_n'),
+  pointsPerSecondButton: document.getElementById('pointsps_b'),
 
-  // Tempo entre ganhos de pontos
-  pointsfi_counter_n: document.getElementById("pointsfi_c_n"),
+  // Tempo entre ganhos automáticos
+  pointsIntervalCounterNumber: document.getElementById('pointsfi_c_n'),
 
   // Sistema
-  save_button: document.getElementById("save_b"),
-  reset_button: document.getElementById("reset_b"),
+  saveButton: document.getElementById('save_b'),
+  resetButton: document.getElementById('reset_b'),
 };
 
-const game_l = {
+
+// ======================================================
+// ESTADO DO JOGO
+// ======================================================
+
+const gameState = {
   points: 0,
-  points_per_click: 1,
-  points_for_every_time_interval: 0,
-  x_milliseconds_for_every_point_gain: 1000,
-  points_multiplier: 1,
+  pointsPerClick: 1,
+  pointsForEveryTimeInterval: 0,
+  millisecondsForEveryPointGain: 1000,
+  pointsMultiplier: 1,
 };
 
-const upgrade_l = {
-  points_per_click_price: 5,
-  points_per_click_level: 1,
-  points_per_click_increase: 1.75,
-  points_per_click_gain: 1,
+const upgradeState = {
+  pointsPerClickPrice: 5,
+  pointsPerClickLevel: 1,
+  pointsPerClickIncrease: 1.75,
+  pointsPerClickGain: 1,
 
-  points_for_every_time_interval_price: 50,
-  points_for_every_time_interval_level: 1,
-  points_for_every_time_interval_increase: 2,
-  points_for_every_time_interval_gain: 1,
+  pointsForEveryTimeIntervalPrice: 50,
+  pointsForEveryTimeIntervalLevel: 1,
+  pointsForEveryTimeIntervalIncrease: 2,
+  pointsForEveryTimeIntervalGain: 1,
 };
 
-const level_l = {
+const levelState = {
   xp: 0,
   level: 0,
-  level_multiplier: 0,
 
-  base_points_for_xp: 50,
-  points_for_xp: 50,
-  xp_for_level: 2,
-  max_level: 10,
-  xp_gain: 1,
-  level_multiplier_gain: 0.5,
-  points_requirement_multiplier: 1.5,
-  xp_requirement_increase: 1,
-  points_base_requirement_multiplier: 1,
-  xp_base_requirement_multiplier: 1,
+  basePointsForXp: 50,
+  pointsForXp: 50,
+  xpForLevel: 2,
+  maxLevel: 10,
+
+  xpGain: 1,
+  levelMultiplierGain: 0.5,
+
+  xpRequirementIncrease: 1,
 };
-// ---
 
-// Chamada Inicial
-loadGame();
-updateGame();
-// ---
 
-// Funções Utilitárias
-function formatNumber(n, type = "r") {
-  return type === "f" ? Math.floor(n * 100) / 100 : Math.round(n * 100) / 100;
-}
-// ---
+// ======================================================
+// FUNÇÕES UTILITÁRIAS
+// ======================================================
 
-function points_auto_production() {
-  if (game_l.points_for_every_time_interval > 0) {
-    game_l.points +=
-      game_l.points_for_every_time_interval *
-      formatNumber(game_l.points_multiplier);
-    updateGame();
+function formatNumber(number, type = 'round') {
+  if (type === 'floor') {
+    return Math.floor(number * 100) / 100;
   }
-}
-setInterval(points_auto_production, game_l.x_milliseconds_for_every_point_gain);
 
-// Botões
-function pointsButton() {
-  game_l.points += game_l.points_per_click * (game_l.points_multiplier || 1);
+  return Math.round(number * 100) / 100;
+}
+
+function getCurrentClickGain() {
+  return gameState.pointsPerClick * gameState.pointsMultiplier;
+}
+
+function getCurrentAutoGain() {
+  return gameState.pointsForEveryTimeInterval * gameState.pointsMultiplier;
+}
+
+
+// ======================================================
+// SISTEMA DE PONTOS
+// ======================================================
+
+function gainPointsByClick() {
+  gameState.points += getCurrentClickGain();
   updateGame();
 }
 
-function pointspcButton() {
-  if (game_l.points >= formatNumber(upgrade_l.points_per_click_price, "f")) {
-    game_l.points -= formatNumber(upgrade_l.points_per_click_price, "f");
-    upgrade_l.points_per_click_price *= upgrade_l.points_per_click_increase;
-    upgrade_l.points_per_click_level += 1;
-    game_l.points_per_click += upgrade_l.points_per_click_gain;
+function gainPointsAutomatically() {
+  if (gameState.pointsForEveryTimeInterval <= 0) {
+    return;
   }
+
+  gameState.points += getCurrentAutoGain();
   updateGame();
 }
 
-function pointspsButton() {
-  if (
-    game_l.points >=
-    formatNumber(upgrade_l.points_for_every_time_interval_price, "f")
-  ) {
-    game_l.points -= formatNumber(
-      upgrade_l.points_for_every_time_interval_price,
-      "f",
-    );
-    upgrade_l.points_for_every_time_interval_price *=
-      upgrade_l.points_for_every_time_interval_increase;
-    upgrade_l.points_for_every_time_interval_level += 1;
-    game_l.points_for_every_time_interval +=
-      upgrade_l.points_for_every_time_interval_gain;
+
+// ======================================================
+// SISTEMA DE UPGRADES
+// ======================================================
+
+function buyPointsPerClickUpgrade() {
+  const price = formatNumber(upgradeState.pointsPerClickPrice, 'floor');
+
+  if (gameState.points < price) {
+    return;
   }
+
+  gameState.points -= price;
+  gameState.pointsPerClick += upgradeState.pointsPerClickGain;
+
+  upgradeState.pointsPerClickPrice *= upgradeState.pointsPerClickIncrease;
+  upgradeState.pointsPerClickLevel += 1;
+
   updateGame();
 }
 
-function saveButton() {
-  saveGame();
-}
+function buyPointsPerSecondUpgrade() {
+  const price = formatNumber(
+    upgradeState.pointsForEveryTimeIntervalPrice,
+    'floor',
+  );
 
-function resetButton() {
-  localStorage.removeItem(SAVE_KEY);
-  location.reload();
-}
-// ---
-
-function updateLevel() {
-  if (level_l.xp == level_l.xp_for_level) {
-    level_l.level += 1;
-    console.log("Subiu para o Nível " + level_l.level);
-    game_l.points -= level_l.points_for_xp;
-    level_l.points_for_xp =
-      level_l.base_points_for_xp *
-      (level_l.xp_for_level * 2 - 1) *
-      level_l.level;
-    level_l.xp_for_level += level_l.xp_requirement_increase;
-    level_l.xp = 0;
-    game_l.points_multiplier += level_l.level_multiplier_gain;
-    updateUI();
+  if (gameState.points < price) {
+    return;
   }
+
+  gameState.points -= price;
+  gameState.pointsForEveryTimeInterval +=
+    upgradeState.pointsForEveryTimeIntervalGain;
+
+  upgradeState.pointsForEveryTimeIntervalPrice *=
+    upgradeState.pointsForEveryTimeIntervalIncrease;
+  upgradeState.pointsForEveryTimeIntervalLevel += 1;
+
+  updateGame();
 }
 
-function updateXp() {
-  level_l.xp += level_l.xp_gain;
-  console.log("Ganhou +" + level_l.xp_gain + " Xp");
 
-  if (level_l.xp < level_l.xp_for_level) {
-    level_l.points_for_xp *= 1.75; //((level_l.xp_for_level/2) + 0.5)
-  } else {
-    updateLevel();
-  }
-}
+// ======================================================
+// SISTEMA DE NÍVEL
+// ======================================================
 
-function updateLevelUp() {
-  if (game_l.points >= level_l.points_for_xp) {
-    updateXp();
-    updateLevelUpCounters();
-  }
-}
-
-// Interface (Contadores e Botões)
-function updateLevelUpCounters(type) {
-  switch (type) {
-    case "xp":
-      ui.level_xp_progress_counter.innerHTML(
-        "Xp: ( " +
-          formatNumber(level_l.xp) +
-          " / " +
-          formatNumber(level_l.xp_for_level, "f") +
-          " ) ➡ +1 Level",
-      );
-      break;
-    case "level":
-      ui.level_level_progress_counter.innerHTML =
-        "Level: ( " +
-        formatNumber(level_l.level) +
-        " / " +
-        formatNumber(level_l.max_level, "f") +
-        " ) ➡ +x " +
-        level_l.level_multiplier_gain +
-        "Pontos";
-      break;
-    case "points_req":
-      ui.level_points_progress_counter.innerHTML =
-        "Pontos: ( " +
-        formatNumber(game_l.points) +
-        " / " +
-        formatNumber(level_l.points_for_xp, "f") +
-        " ) ➡ +" +
-        level_l.xp_gain +
-        " Xp";
-      break;
-    default:
-      ui.level_xp_progress_counter.innerHTML =
-        "Xp: ( " + level_l.xp + " / " + level_l.xp_for_level + " ) ➡ +1 Level";
-      ui.level_level_progress_counter.innerHTML =
-        "Level: ( " +
-        level_l.level +
-        " / " +
-        level_l.max_level +
-        " ) ➡ + x" +
-        level_l.level_multiplier_gain +
-        " Pontos";
-      ui.level_points_progress_counter.innerHTML =
-        "Pontos: ( " +
-        formatNumber(game_l.points) +
-        " / " +
-        formatNumber(level_l.points_for_xp, "f") +
-        " ) ➡ +" +
-        level_l.xp_gain +
-        " Xp";
-  }
-}
-
-function updateCounters() {
-  ui.points_multiplier_counter.innerHTML = `Multiplicador de Pontos: <b>x${formatNumber(game_l.points_multiplier)}</b>`;
-  ui.points_counter_n.innerHTML = formatNumber(game_l.points);
-  ui.pointspc_counter_n.innerHTML =
-    "+" +
-    formatNumber(
-      game_l.points_per_click * formatNumber(game_l.points_multiplier),
-    );
-  ui.pointsps_counter_n.innerHTML =
-    "+" +
-    formatNumber(
-      game_l.points_for_every_time_interval *
-        formatNumber(game_l.points_multiplier),
-    );
-  ui.pointsfi_counter_n.innerHTML = formatNumber(
-    game_l.x_milliseconds_for_every_point_gain / 1000,
+function canGainXp() {
+  return (
+    gameState.points >= levelState.pointsForXp &&
+    levelState.level < levelState.maxLevel
   );
 }
 
-function updateButtons() {
-  let points_b_text = `Clique para +<b>${game_l.points_per_click * formatNumber(game_l.points_multiplier)} </b> Pontos`;
-  let pointspc_b_text = `+<b>${upgrade_l.points_per_click_gain * formatNumber(game_l.points_multiplier)} </b> \"Pontos por Clique\" 
-        ( ${formatNumber(upgrade_l.points_per_click_price)} Pontos ) [ ${upgrade_l.points_per_click_level} ]`;
-  let pointsps_b_text = `+<b>${upgrade_l.points_for_every_time_interval_gain * formatNumber(game_l.points_multiplier)} </b> Pontos por \"Intervalo\" 
-        ( ${formatNumber(upgrade_l.points_for_every_time_interval_price)} Pontos ) [ ${upgrade_l.points_for_every_time_interval_level} ]`;
+function gainXp() {
+  levelState.xp += levelState.xpGain;
+  console.log(`Ganhou +${levelState.xpGain} XP`);
 
-  ui.points_button.innerHTML = points_b_text;
-  ui.pointspc_button.innerHTML = pointspc_b_text;
-  ui.pointsps_button.innerHTML = pointsps_b_text;
+  if (levelState.xp >= levelState.xpForLevel) {
+    levelUp();
+    return;
+  }
+
+  levelState.pointsForXp *= 1.75;
 }
 
-// ---
+function levelUp() {
+  levelState.level += 1;
+  levelState.xp = 0;
 
-// Funções de Salvamento
+  gameState.points -= levelState.pointsForXp;
+  gameState.pointsMultiplier += levelState.levelMultiplierGain;
+
+  levelState.pointsForXp =
+    levelState.basePointsForXp *
+    (levelState.xpForLevel * 2 - 1) *
+    levelState.level;
+
+  levelState.xpForLevel += levelState.xpRequirementIncrease;
+
+  console.log(`Subiu para o nível ${levelState.level}`);
+}
+
+function updateLevelSystem() {
+  if (!canGainXp()) {
+    return;
+  }
+
+  gainXp();
+}
+
+
+// ======================================================
+// ATUALIZAÇÃO DA INTERFACE
+// ======================================================
+
+function updateLevelCounters() {
+  ui.levelPointsProgressCounter.innerHTML =
+    `Pontos: ( ${formatNumber(gameState.points)} / ${formatNumber(levelState.pointsForXp, 'floor')} ) ➡ +${levelState.xpGain} XP`;
+
+  ui.levelXpProgressCounter.innerHTML =
+    `XP: ( ${levelState.xp} / ${levelState.xpForLevel} ) ➡ +1 Level`;
+
+  ui.levelLevelProgressCounter.innerHTML =
+    `Level: ( ${levelState.level} / ${levelState.maxLevel} ) ➡ +x${levelState.levelMultiplierGain} Pontos`;
+}
+
+function updateCounters() {
+  ui.pointsMultiplierCounter.innerHTML =
+    `Multiplicador de Pontos: <b>x${formatNumber(gameState.pointsMultiplier)}</b>`;
+
+  ui.pointsCounterNumber.innerHTML = formatNumber(gameState.points);
+
+  ui.pointsPerClickCounterNumber.innerHTML =
+    `+${formatNumber(getCurrentClickGain())}`;
+
+  ui.pointsPerSecondCounterNumber.innerHTML =
+    `+${formatNumber(getCurrentAutoGain())}`;
+
+  ui.pointsIntervalCounterNumber.innerHTML =
+    formatNumber(gameState.millisecondsForEveryPointGain / 1000);
+}
+
+function updateButtons() {
+  ui.pointsButton.innerHTML =
+    `Clique para +<b>${formatNumber(getCurrentClickGain())}</b> Pontos`;
+
+  ui.pointsPerClickButton.innerHTML =
+    `+<b>${formatNumber(upgradeState.pointsPerClickGain * gameState.pointsMultiplier)}</b> Pontos por Clique 
+    ( ${formatNumber(upgradeState.pointsPerClickPrice)} Pontos ) [ ${upgradeState.pointsPerClickLevel} ]`;
+
+  ui.pointsPerSecondButton.innerHTML =
+    `+<b>${formatNumber(upgradeState.pointsForEveryTimeIntervalGain * gameState.pointsMultiplier)}</b> Pontos por Intervalo 
+    ( ${formatNumber(upgradeState.pointsForEveryTimeIntervalPrice)} Pontos ) [ ${upgradeState.pointsForEveryTimeIntervalLevel} ]`;
+}
+
+function updateUI() {
+  updateLevelCounters();
+  updateCounters();
+  updateButtons();
+}
+
+
+// ======================================================
+// SALVAMENTO
+// ======================================================
+
 function saveGame() {
   const gameData = {
-    game: game_l,
-    upgrades: upgrade_l,
-    level: level_l,
+    game: gameState,
+    upgrades: upgradeState,
+    level: levelState,
   };
+
   localStorage.setItem(SAVE_KEY, JSON.stringify(gameData));
 }
 
 function loadGame() {
-  let save = localStorage.getItem(SAVE_KEY);
-  if (save) {
+  const save = localStorage.getItem(SAVE_KEY);
+
+  if (!save) {
+    return;
+  }
+
+  try {
     const parsedData = JSON.parse(save);
 
-    Object.assign(game_l, parsedData.game);
-    Object.assign(upgrade_l, parsedData.upgrades);
-    Object.assign(level_l, parsedData.level);
+    if (parsedData.game) {
+      Object.assign(gameState, parsedData.game);
+    }
+
+    if (parsedData.upgrades) {
+      Object.assign(upgradeState, parsedData.upgrades);
+    }
+
+    if (parsedData.level) {
+      Object.assign(levelState, parsedData.level);
+    }
+  } catch (error) {
+    console.error('Erro ao carregar o save:', error);
   }
 }
-// ---
 
-//Chamadas de Função
-function updateUI() {
-  updateLevelUpCounters();
-  updateCounters();
-  updateButtons();
+function resetGame() {
+  localStorage.removeItem(SAVE_KEY);
+  location.reload();
 }
+
+
+// ======================================================
+// LOOP PRINCIPAL
+// ======================================================
+
 function updateGame() {
+  updateLevelSystem();
   updateUI();
-  updateLevelUp();
 }
 
-ui.points_button.addEventListener("click", pointsButton);
-ui.pointspc_button.addEventListener("click", pointspcButton);
-ui.pointsps_button.addEventListener("click", pointspsButton);
-ui.save_button.addEventListener("click", saveButton);
-ui.reset_button.addEventListener("click", resetButton);
 
-setInterval(saveGame, 10000); // Salvar jogo a cada 10 segundos
-// ---
+// ======================================================
+// EVENTOS
+// ======================================================
+
+ui.pointsButton.addEventListener('click', gainPointsByClick);
+ui.pointsPerClickButton.addEventListener('click', buyPointsPerClickUpgrade);
+ui.pointsPerSecondButton.addEventListener('click', buyPointsPerSecondUpgrade);
+ui.saveButton.addEventListener('click', saveGame);
+ui.resetButton.addEventListener('click', resetGame);
+
+
+// ======================================================
+// INICIALIZAÇÃO
+// ======================================================
+
+loadGame();
+updateGame();
+
+setInterval(
+  gainPointsAutomatically,
+  gameState.millisecondsForEveryPointGain,
+);
+
+setInterval(saveGame, 10000);
