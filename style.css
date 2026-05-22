@@ -60,8 +60,16 @@ body {
   color: var(--color-text);
 
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(167, 139, 250, 0.16), transparent 34%),
+    radial-gradient(
+      circle at top left,
+      rgba(56, 189, 248, 0.18),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(167, 139, 250, 0.16),
+      transparent 34%
+    ),
     linear-gradient(135deg, var(--color-bg), var(--color-bg-glow));
 
   overflow: hidden;
@@ -70,7 +78,6 @@ body {
 button {
   font-family: inherit;
 }
-
 
 /* ======================================================
    LAYOUT GERAL
@@ -87,22 +94,37 @@ button {
 }
 
 .panel {
-  width: min(100%, 390px);
+  width: min(100%, 400px);
   max-height: calc(100vh - 32px);
 
-  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  overflow: hidden;
+}
+
+.game-modal {
+  padding: 13px;
 
   background-color: rgba(17, 24, 39, 0.94);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-panel);
-
-  overflow: hidden;
 }
 
+.level-modal,
+.status-modal,
+.upgrades-modal,
+.footer-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
 
 /* ======================================================
    MULTIPLICADOR
@@ -125,7 +147,6 @@ button {
   font-size: 16px;
   color: var(--color-text);
 }
-
 
 /* ======================================================
    PROGRESSO DE NÍVEIS
@@ -167,7 +188,6 @@ button {
   color: var(--color-level);
 }
 
-
 /* ======================================================
    DIVISÓRIA
 ====================================================== */
@@ -177,7 +197,6 @@ hr {
   border: none;
   border-top: 1px solid var(--color-border);
 }
-
 
 /* ======================================================
    STATUS DO JOGO
@@ -190,32 +209,18 @@ hr {
 }
 
 .stats p {
-  padding: 9px 10px;
-
-  text-align: center;
-  font-size: 11px;
-  line-height: 1.35;
-
-  background-color: var(--color-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
+  padding: 8px 10px;
+  font-size: 10px;
 }
 
 .stats p span {
-  display: inline-block;
   margin-top: 2px;
-
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--color-text);
+  font-size: 13px;
 }
 
 #points_c_n {
-  font-size: 26px;
-  color: var(--color-points);
+  font-size: 24px;
 }
-
 
 /* ======================================================
    BOTÕES BASE
@@ -249,7 +254,6 @@ button:active {
   box-shadow: none;
 }
 
-
 /* ======================================================
    BOTÃO PRINCIPAL
 ====================================================== */
@@ -265,25 +269,56 @@ button:active {
   border-color: rgba(187, 247, 208, 0.45);
 }
 
-
 /* ======================================================
    UPGRADES
 ====================================================== */
 
-.upgrades {
-  display: grid;
-  gap: 8px;
-}
-
 .upgrades button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
   width: 100%;
   padding: 10px 12px;
+  margin-bottom: 7px;
 
+  text-align: left;
   color: var(--color-xp);
   background-color: var(--color-xp-soft);
   border-color: rgba(56, 189, 248, 0.34);
 }
 
+.upgrades button span {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.upgrades button small {
+  font-size: 10px;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.modal-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  text-align: center;
+}
+
+.modal-title span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.modal-title small {
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
 
 /* ======================================================
    SISTEMA
@@ -312,7 +347,6 @@ button:active {
   border-color: rgba(239, 68, 68, 0.34);
 }
 
-
 /* ======================================================
    INFORMAÇÕES FINAIS
 ====================================================== */
@@ -334,10 +368,19 @@ button:active {
   color: var(--color-text-muted);
 }
 
-#v_comment i {
-  color: var(--color-points);
+.footer-modal {
+  gap: 7px;
 }
 
+#save_warning {
+  font-size: 9px;
+}
+
+#v_comment {
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 9px;
+}
 
 /* ======================================================
    RESPONSIVIDADE

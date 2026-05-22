@@ -2,8 +2,7 @@
 // CONFIGURAÇÕES GERAIS
 // ======================================================
 
-const SAVE_KEY = 'mySave';
-
+const SAVE_KEY = "mySave";
 
 // ======================================================
 // REFERÊNCIAS DA INTERFACE
@@ -11,37 +10,34 @@ const SAVE_KEY = 'mySave';
 
 const ui = {
   // Multiplicador
-  pointsMultiplierCounter: document.getElementById('points_mult'),
+  pointsMultiplierCounter: document.getElementById("points_mult"),
 
   // Progresso de nível
   levelPointsProgressCounter: document.getElementById(
-    'level_points_progress_c',
+    "level_points_progress_c",
   ),
-  levelXpProgressCounter: document.getElementById('level_xp_progress_c'),
-  levelLevelProgressCounter: document.getElementById(
-    'level_level_progress_c',
-  ),
+  levelXpProgressCounter: document.getElementById("level_xp_progress_c"),
+  levelLevelProgressCounter: document.getElementById("level_level_progress_c"),
 
   // Pontos
-  pointsCounterNumber: document.getElementById('points_c_n'),
-  pointsButton: document.getElementById('points_b'),
+  pointsCounterNumber: document.getElementById("points_c_n"),
+  pointsButton: document.getElementById("points_b"),
 
   // Pontos por clique
-  pointsPerClickCounterNumber: document.getElementById('pointspc_c_n'),
-  pointsPerClickButton: document.getElementById('pointspc_b'),
+  pointsPerClickCounterNumber: document.getElementById("pointspc_c_n"),
+  pointsPerClickButton: document.getElementById("pointspc_b"),
 
   // Pontos por segundo
-  pointsPerSecondCounterNumber: document.getElementById('pointsps_c_n'),
-  pointsPerSecondButton: document.getElementById('pointsps_b'),
+  pointsPerSecondCounterNumber: document.getElementById("pointsps_c_n"),
+  pointsPerSecondButton: document.getElementById("pointsps_b"),
 
   // Tempo entre ganhos automáticos
-  pointsIntervalCounterNumber: document.getElementById('pointsfi_c_n'),
+  pointsIntervalCounterNumber: document.getElementById("pointsfi_c_n"),
 
   // Sistema
-  saveButton: document.getElementById('save_b'),
-  resetButton: document.getElementById('reset_b'),
+  saveButton: document.getElementById("save_b"),
+  resetButton: document.getElementById("reset_b"),
 };
-
 
 // ======================================================
 // ESTADO DO JOGO
@@ -82,13 +78,12 @@ const levelState = {
   xpRequirementIncrease: 1,
 };
 
-
 // ======================================================
 // FUNÇÕES UTILITÁRIAS
 // ======================================================
 
-function formatNumber(number, type = 'round') {
-  if (type === 'floor') {
+function formatNumber(number, type = "round") {
+  if (type === "floor") {
     return Math.floor(number * 100) / 100;
   }
 
@@ -102,7 +97,6 @@ function getCurrentClickGain() {
 function getCurrentAutoGain() {
   return gameState.pointsForEveryTimeInterval * gameState.pointsMultiplier;
 }
-
 
 // ======================================================
 // SISTEMA DE PONTOS
@@ -122,13 +116,12 @@ function gainPointsAutomatically() {
   updateGame();
 }
 
-
 // ======================================================
 // SISTEMA DE UPGRADES
 // ======================================================
 
 function buyPointsPerClickUpgrade() {
-  const price = formatNumber(upgradeState.pointsPerClickPrice, 'floor');
+  const price = formatNumber(upgradeState.pointsPerClickPrice, "floor");
 
   if (gameState.points < price) {
     return;
@@ -146,7 +139,7 @@ function buyPointsPerClickUpgrade() {
 function buyPointsPerSecondUpgrade() {
   const price = formatNumber(
     upgradeState.pointsForEveryTimeIntervalPrice,
-    'floor',
+    "floor",
   );
 
   if (gameState.points < price) {
@@ -163,7 +156,6 @@ function buyPointsPerSecondUpgrade() {
 
   updateGame();
 }
-
 
 // ======================================================
 // SISTEMA DE NÍVEL
@@ -213,49 +205,40 @@ function updateLevelSystem() {
   gainXp();
 }
 
-
 // ======================================================
 // ATUALIZAÇÃO DA INTERFACE
 // ======================================================
 
 function updateLevelCounters() {
-  ui.levelPointsProgressCounter.innerHTML =
-    `Pontos: ( ${formatNumber(gameState.points)} / ${formatNumber(levelState.pointsForXp, 'floor')} ) ➡ +${levelState.xpGain} XP`;
+  ui.levelPointsProgressCounter.innerHTML = `Próximo XP: ${formatNumber(gameState.points)} / ${formatNumber(levelState.pointsForXp, "floor")} pontos`;
 
-  ui.levelXpProgressCounter.innerHTML =
-    `XP: ( ${levelState.xp} / ${levelState.xpForLevel} ) ➡ +1 Level`;
+  ui.levelXpProgressCounter.innerHTML = `XP acumulado: ${levelState.xp} / ${levelState.xpForLevel}`;
 
-  ui.levelLevelProgressCounter.innerHTML =
-    `Level: ( ${levelState.level} / ${levelState.maxLevel} ) ➡ +x${levelState.levelMultiplierGain} Pontos`;
+  ui.levelLevelProgressCounter.innerHTML = `Nível: ${levelState.level} / ${levelState.maxLevel} · Bônus: +x${levelState.levelMultiplierGain}`;
 }
 
 function updateCounters() {
-  ui.pointsMultiplierCounter.innerHTML =
-    `Multiplicador de Pontos: <b>x${formatNumber(gameState.pointsMultiplier)}</b>`;
+  ui.pointsMultiplierCounter.innerHTML = `Multiplicador atual: <b>x${formatNumber(gameState.pointsMultiplier)}</b>`;
 
   ui.pointsCounterNumber.innerHTML = formatNumber(gameState.points);
 
-  ui.pointsPerClickCounterNumber.innerHTML =
-    `+${formatNumber(getCurrentClickGain())}`;
+  ui.pointsPerClickCounterNumber.innerHTML = `+${formatNumber(getCurrentClickGain())}`;
 
-  ui.pointsPerSecondCounterNumber.innerHTML =
-    `+${formatNumber(getCurrentAutoGain())}`;
+  ui.pointsPerSecondCounterNumber.innerHTML = `+${formatNumber(getCurrentAutoGain())}`;
 
-  ui.pointsIntervalCounterNumber.innerHTML =
-    formatNumber(gameState.millisecondsForEveryPointGain / 1000);
+  ui.pointsIntervalCounterNumber.innerHTML = formatNumber(
+    gameState.millisecondsForEveryPointGain / 1000,
+  );
 }
 
 function updateButtons() {
-  ui.pointsButton.innerHTML =
-    `Clique para +<b>${formatNumber(getCurrentClickGain())}</b> Pontos`;
+  ui.pointsButton.innerHTML = `Coletar <b>+${formatNumber(getCurrentClickGain())}</b> pontos`;
 
-  ui.pointsPerClickButton.innerHTML =
-    `+<b>${formatNumber(upgradeState.pointsPerClickGain * gameState.pointsMultiplier)}</b> Pontos por Clique 
-    ( ${formatNumber(upgradeState.pointsPerClickPrice)} Pontos ) [ ${upgradeState.pointsPerClickLevel} ]`;
+  ui.pointsPerClickButton.innerHTML = `<span>Melhorar clique</span>
+    <small>+${formatNumber(upgradeState.pointsPerClickGain * gameState.pointsMultiplier)} por clique · Custo: ${formatNumber(upgradeState.pointsPerClickPrice)} pontos · Nv. ${upgradeState.pointsPerClickLevel}</small>`;
 
-  ui.pointsPerSecondButton.innerHTML =
-    `+<b>${formatNumber(upgradeState.pointsForEveryTimeIntervalGain * gameState.pointsMultiplier)}</b> Pontos por Intervalo 
-    ( ${formatNumber(upgradeState.pointsForEveryTimeIntervalPrice)} Pontos ) [ ${upgradeState.pointsForEveryTimeIntervalLevel} ]`;
+  ui.pointsPerSecondButton.innerHTML = `<span>Melhorar produção</span>
+    <small>+${formatNumber(upgradeState.pointsForEveryTimeIntervalGain * gameState.pointsMultiplier)} por intervalo · Custo: ${formatNumber(upgradeState.pointsForEveryTimeIntervalPrice)} pontos · Nv. ${upgradeState.pointsForEveryTimeIntervalLevel}</small>`;
 }
 
 function updateUI() {
@@ -263,7 +246,6 @@ function updateUI() {
   updateCounters();
   updateButtons();
 }
-
 
 // ======================================================
 // SALVAMENTO
@@ -301,7 +283,7 @@ function loadGame() {
       Object.assign(levelState, parsedData.level);
     }
   } catch (error) {
-    console.error('Erro ao carregar o save:', error);
+    console.error("Erro ao carregar o save:", error);
   }
 }
 
@@ -309,7 +291,6 @@ function resetGame() {
   localStorage.removeItem(SAVE_KEY);
   location.reload();
 }
-
 
 // ======================================================
 // LOOP PRINCIPAL
@@ -320,17 +301,15 @@ function updateGame() {
   updateUI();
 }
 
-
 // ======================================================
 // EVENTOS
 // ======================================================
 
-ui.pointsButton.addEventListener('click', gainPointsByClick);
-ui.pointsPerClickButton.addEventListener('click', buyPointsPerClickUpgrade);
-ui.pointsPerSecondButton.addEventListener('click', buyPointsPerSecondUpgrade);
-ui.saveButton.addEventListener('click', saveGame);
-ui.resetButton.addEventListener('click', resetGame);
-
+ui.pointsButton.addEventListener("click", gainPointsByClick);
+ui.pointsPerClickButton.addEventListener("click", buyPointsPerClickUpgrade);
+ui.pointsPerSecondButton.addEventListener("click", buyPointsPerSecondUpgrade);
+ui.saveButton.addEventListener("click", saveGame);
+ui.resetButton.addEventListener("click", resetGame);
 
 // ======================================================
 // INICIALIZAÇÃO
@@ -339,9 +318,6 @@ ui.resetButton.addEventListener('click', resetGame);
 loadGame();
 updateGame();
 
-setInterval(
-  gainPointsAutomatically,
-  gameState.millisecondsForEveryPointGain,
-);
+setInterval(gainPointsAutomatically, gameState.millisecondsForEveryPointGain);
 
 setInterval(saveGame, 10000);

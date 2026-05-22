@@ -11,67 +11,79 @@
     <div class="container">
       <!-- Painel esquerdo -->
       <div class="panel">
-        <!-- Multiplicador -->
-        <p id="points_mult">Multiplicador de Pontos: <b>x1</b></p>
+        <!-- Modal: Progresso de Níveis -->
+        <section class="game-modal level-modal">
+          <p id="points_mult">Multiplicador de Pontos: <b>x1</b></p>
 
-        <!-- Progresso de Níveis -->
-        <div class="progress-group">
-          <p id="level_points_progress_c">
-            Pontos: ( "Pontos Atuais" / "Pontos Necessários" ) → +1 Xp
+          <div class="progress-group">
+            <p id="level_points_progress_c">
+              Pontos para XP: aguardando dados...
+            </p>
+
+            <p id="level_xp_progress_c">XP atual: aguardando dados...</p>
+
+            <p id="level_level_progress_c">Nível atual: aguardando dados...</p>
+          </div>
+        </section>
+
+        <!-- Modal: Status + Botão Principal -->
+        <section class="game-modal status-modal">
+          <div class="stats">
+            <p id="points_c">
+              Pontos disponíveis
+              <br />
+              <span id="points_c_n">0</span>
+            </p>
+
+            <p id="pointspc_c">
+              Ganho por clique
+              <br />
+              <span id="pointspc_c_n">+1</span>
+            </p>
+
+            <p id="pointsps_c">
+              Ganho automático a cada
+              <span id="pointsfi_c_n">1</span>s
+              <br />
+              <span id="pointsps_c_n">0</span>
+            </p>
+          </div>
+
+          <button id="points_b">Coletar pontos</button>
+        </section>
+
+        <!-- Modal: Upgrades -->
+        <section class="game-modal upgrades-modal">
+          <div class="modal-title">
+            <span>Melhorias</span>
+            <small>Invista pontos para acelerar seu progresso</small>
+          </div>
+
+          <div class="upgrades">
+            <button id="pointspc_b">Melhorar clique</button>
+
+            <button id="pointsps_b">Melhorar ganho automático</button>
+          </div>
+        </section>
+
+        <!-- Modal: Rodapé / Sistema -->
+        <section class="game-modal footer-modal">
+          <div class="system">
+            <button id="save_b"><b>Salvar</b></button>
+
+            <button id="reset_b"><b>Excluir</b></button>
+          </div>
+
+          <p id="save_warning">
+            Salvamento automático a cada <b>10</b> segundos
           </p>
 
-          <p id="level_xp_progress_c">
-            Xp: ( "Xp" / "Xp Necessário" ) → +1 Level
+          <p id="v_comment">
+            Versão 0.5 — Reorganização visual
+            <br />
+            <i>Projeto retomado :D</i>
           </p>
-
-          <p id="level_level_progress_c">Level: ( "Level" / 10 ) → +0x</p>
-        </div>
-
-        <hr />
-
-        <!-- Status -->
-        <div class="stats">
-          <p id="points_c">Pontos: <br /><span id="points_c_n">0</span></p>
-
-          <p id="pointspc_c">
-            Pontos por Clique: <br /><span id="pointspc_c_n">+1</span>
-          </p>
-
-          <p id="pointsps_c">
-            Pontos a cada <span id="pointsfi_c_n">1</span> Segundo: <br /><span
-              id="pointsps_c_n"
-              >0</span
-            >
-          </p>
-        </div>
-
-        <!-- Botão principal -->
-        <button id="points_b">Clique para +# Pontos</button>
-
-        <!-- Upgrades -->
-        <div class="upgrades">
-          <button id="pointspc_b">+# Pontos por Clique</button>
-
-          <button id="pointsps_b">
-            +# Pontos por Segundo ( x Pontos ) [ x ]
-          </button>
-        </div>
-
-        <!-- Sistema -->
-        <div class="system">
-          <button id="save_b"><b>Salvar</b> Progresso</button>
-
-          <button id="reset_b"><b>Resetar</b> Progresso</button>
-        </div>
-
-        <p id="save_warning">
-          (Salvamento Automático a cada <b>10</b> Segundos)
-        </p>
-
-        <p id="v_comment">
-          Versão 0.4 - Sistema de Níveis: <br />
-          <i>Lançamento! :D</i>
-        </p>
+        </section>
       </div>
     </div>
 
